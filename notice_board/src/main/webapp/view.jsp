@@ -136,7 +136,7 @@
             %>
                 <!-- 수정버튼을 누르면 수정 가능하게끔 -->
                 <a href="update.jsp?bbsID=<%= bbsID %>" class="btn btn-primary">수정</a>
-                <a href="deleteAction.jsp?bbsID=<%= bbsID %>" class="btn btn-primary">삭제</a>
+                <a onclick="return confirm('정말로 삭제하시겠습니까?')" href="deleteAction.jsp?bbsID=<%= bbsID %>"  class="btn btn-primary">삭제</a>
             <%
                 }
             %>
@@ -144,7 +144,7 @@
         </div>
 
     </div>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js">
     <script src="js/bootstrap.js"></script>
 </body>
 </html>
