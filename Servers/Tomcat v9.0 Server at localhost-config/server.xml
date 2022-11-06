@@ -152,7 +152,7 @@
              Note: The pattern used is equivalent to using pattern="common" -->
         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs" pattern="%h %l %u %t &quot;%r&quot; %s %b" prefix="localhost_access_log" suffix=".txt"/>
 
-      <Context docBase="jwbook" path="/jwbook" reloadable="true" source="org.eclipse.jst.jee.server:jwbook"/><Context docBase="jwbook2" path="/jwbook2" reloadable="true" source="org.eclipse.jst.jee.server:jwbook2"/><Context docBase="jsp_maria_crud2" path="/jsp_maria_crud2" reloadable="true" source="org.eclipse.jst.jee.server:jsp_maria_crud2"/><Context docBase="jsp_maria_crud" path="/jsp_maria_crud" reloadable="true" source="org.eclipse.jst.jee.server:jsp_maria_crud"/><Context docBase="notice_board" path="/notice_board" reloadable="true" source="org.eclipse.jst.jee.server:notice_board"/></Host>
+      <Context docBase="jwbook" path="/jwbook" reloadable="true" source="org.eclipse.jst.jee.server:jwbook"/><Context docBase="jwbook2" path="/jwbook2" reloadable="true" source="org.eclipse.jst.jee.server:jwbook2"/><Context docBase="jsp_maria_crud2" path="/jsp_maria_crud2" reloadable="true" source="org.eclipse.jst.jee.server:jsp_maria_crud2"/><Context docBase="jsp_maria_crud" path="/jsp_maria_crud" reloadable="true" source="org.eclipse.jst.jee.server:jsp_maria_crud"/><Context docBase="notice_board" path="/notice_board" reloadable="true" source="org.eclipse.jst.jee.server:notice_board"/><Context docBase="Login_jsp_maria_crud" path="/Login_jsp_maria_crud" reloadable="true" source="org.eclipse.jst.jee.server:Login_jsp_maria_crud"/></Host>
     </Engine>
   </Service>
 </Server>
