@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
  
 public class BbsDAO {
@@ -71,7 +72,7 @@ public class BbsDAO {
 	    public int write(String bbsTitle, String userID, String bbsContent) {
 	        String SQL = "INSERT INTO BBS VALUES (?, ?, ?, ?, ?, ?)";// 데이터베이스 코드
 	        try {
-	            PreparedStatement pstmt = conn.prepareStatement(SQL); //conn객체를 이용, SQL문장을 실행준비로 만듬
+	            PreparedStatement pstmt = conn.prepareStatement(SQL); // conn객체를 이용 SQL문장을 실행준비로 만듬
 	            pstmt.setInt(1, getNext());//getNext 다음번에 쓰일 게시글번호
 	            pstmt.setString(2, bbsTitle);
 	            pstmt.setString(3, userID);
@@ -85,4 +86,49 @@ public class BbsDAO {
 	        }
 	        return -1; //데이터베이스오류
 	    }
+
+	 
+
+	    public ArrayList<Bbs> getList(int pageNumber) {// 특정한페이지에 다른 게시글 가져올 수 있도록
+	        String SQL = "SELECT * FROM BBS WHERE bbsID < ? AND bbsAvailable = 1 ORDER BY bbsID DESC LIMIT 10";
+	        //bbsID가 특정한 숫자보다 작을때, 존재하는글 Available =1, 위에서 10개까지 내림차순
+	        ArrayList<Bbs> list = new ArrayList<Bbs>(); // Bbs서 나오는 인스턴스 보관
+	        try {
+	            PreparedStatement pstmt = conn.prepareStatement(SQL); // conn객체를 이용 SQL문장을 실행준비로 만듬
+	            pstmt.setInt(1, getNext() - (pageNumber -1 ) * 10);//getnext 다음으로 작성될글의 번호
+	            rs = pstmt.executeQuery();
+	            while (rs.next()) {
+	                Bbs bbs = new Bbs();//BBS에 담긴 데이터 가져오기
+	                bbs.setBbsID(rs.getInt(1));
+	                bbs.setBbsTitle(rs.getString(2));
+	                bbs.setUserID(rs.getString(3));
+	                bbs.setBbsDate(rs.getString(4));
+	                bbs.setBbsContent(rs.getString(5));
+	                bbs.setBbsAvailable(rs.getInt(6));
+	                list.add(bbs);//모든 내용이 담긴 게시글 인스턴스를 리스트에 담아 반환
+	            }
+	        } catch(Exception e) {
+	            e.printStackTrace();
+	        }
+	        return list;
+	    }
+
+	 
+
+	    public boolean nextPage(int pageNumber) {//다음 페이지가 없을 경우에 대한 처리
+	    //게시글이 10개일때 pageNumber 1씩 생성, 21개일때는 페이지수 3
+	        String SQL = "SELECT * FROM BBS WHERE bbsID < ? AND bbsAvailable = 1";
+	        try {
+	            PreparedStatement pstmt = conn.prepareStatement(SQL); // conn객체를 이용 SQL문장을 실행준비로 만듬
+	            pstmt.setInt(1, getNext() - (pageNumber -1 ) * 10);
+	            rs = pstmt.executeQuery();
+	            if (rs.next()) {
+	                return true;
+	            }
+	        } catch(Exception e) {
+	            e.printStackTrace();
+	        }
+	        return false;
+	    }
+
 	}
