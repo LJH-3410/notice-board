@@ -39,7 +39,7 @@ public class BbsDAO {
 	    public String getDate() {
 	        String SQL = "SELECT NOW()";
 	        try {
-	            PreparedStatement pstmt = conn.prepareStatement(SQL); //conn객체를 이용 SQL문장을 실행준비로 만듬
+	            PreparedStatement pstmt = conn.prepareStatement(SQL); // conn객체를 이용 SQL문장을 실행준비로 만듬
 	            rs = pstmt.executeQuery();
 	            if (rs.next()) {
 	                return rs.getString(1); //1을해서 현재날짜 그대로 반환
@@ -53,18 +53,21 @@ public class BbsDAO {
 	 
 
 	    public int getNext() {
-	        String SQL = "SELECT bbsID FROM BBS ORDER BY bbsID DESC"; // 내림차순하여 가장 마지막에쓰인 글번호              를 가져올 수 있도록함
+	        String SQL = "SELECT bbsID FROM BBS ORDER BY bbsID DESC"; 
+
+	        // 내림차순하여 가장 마지막에쓰인 글번호를 가져올 수 있도록함
 	        try {
 	            PreparedStatement pstmt = conn.prepareStatement(SQL); // conn객체를 이용 SQL문장을 실행준비로 만듬
 	            rs = pstmt.executeQuery();
 	            if (rs.next()) {
-	               return rs.getInt(1) +1; //1을 더해서 그다음 게시글이 들어갈 수 있도록한다.
+	                return rs.getInt(1) +1; //1을 더해서 그다음 게시글이 들어갈 수 있도록한다.
 	            }
 	            return 1; // 현재가 첫번째 게시물인 경우
 	        } catch(Exception e) {
 	            e.printStackTrace();
 	        }
 	        return -1; //데이터베이스오류
+
 	    }
 
 	 
@@ -129,6 +132,28 @@ public class BbsDAO {
 	            e.printStackTrace();
 	        }
 	        return false;
+	    }
+
+	    public Bbs getBbs(int bbsID) {// 특정한 ID에 해당하는 게시글을 가져오도록함
+	        String SQL = "SELECT * FROM BBS WHERE bbsID = ?"; //bbsID가 특정한 숫자일 경우 진행
+	        try {
+	            PreparedStatement pstmt = conn.prepareStatement(SQL); // conn객체를 이용 SQL문장을 실행준비로 만듬
+	            pstmt.setInt(1, bbsID);
+	            rs = pstmt.executeQuery();
+	            if (rs.next()) { // 결과가 나왔다면
+	                Bbs bbs = new Bbs();
+	                bbs.setBbsID(rs.getInt(1));
+	                bbs.setBbsTitle(rs.getString(2));
+	                bbs.setUserID(rs.getString(3));
+	                bbs.setBbsDate(rs.getString(4));
+	                bbs.setBbsContent(rs.getString(5));
+	                bbs.setBbsAvailable(rs.getInt(6));
+	                return bbs; //정보를 모두 담은 bbs를 리턴 
+	            }
+	        } catch(Exception e) {
+	            e.printStackTrace();
+	        }
+	        return null; //해당글이 존재하지 않는경우 null
 	    }
 
 	}

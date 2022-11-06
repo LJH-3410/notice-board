@@ -3,6 +3,9 @@
     
 <!-- 스크립트 문장 실행시 필요한 라이브러리 -->
 <%@ page import="java.io.PrintWriter" %>
+<%@ page import="bbs.BbsDAO" %>
+<%@ page import="bbs.Bbs" %> 
+<%@ page import="java.util.ArrayList" %><!-- 게시판의 목록을 출력하기 위해서 필요 -->
 
 <!DOCTYPE html>
 <html>
@@ -11,6 +14,18 @@
 <meta name="viewport" content="width=device-width", initial-scale="1">
 <link rel="stylesheet" href="css/bootstrap.css">
 <title>JSP 게시판 웹 사이트</title>
+
+ 
+
+<!-- 게시글 제목 하이퍼링크 디자인 없애기 -->
+<style type="text/css">
+a, a:hover {
+color: #000000;
+text-decoration: none;
+}
+</style>
+
+
 </head>
 <body>
     <%
@@ -80,17 +95,54 @@
                         <th style="background-color: #eeeeee; text-align: center;">작성일</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <td>1</td>
-                    <td>안녕하세요</td>
-                    <td>홍길동</td>
-                    <td>2017-05-04</td>
+                <tbody><!-- 게시글 업로드 될부분 -->
+                    <%
+                        BbsDAO bbsDAO = new BbsDAO(); //게시글을 뽑아올 수 있도록 인스턴스생성
+                        ArrayList<Bbs> list = bbsDAO.getList(pageNumber);
+                        for(int i = 0; i < list.size(); i++) { // 모든 게시글 불러옴
+                    %>
+                    <tr>
+                        <td><%= list.get(i).getBbsID() %></td> // 게시글 번호 리턴
+
+                        <!-- 제목을 눌렀을때 해당 게시물로 이동, 해당번호에 맞는 페이지 나올 수 있게 -->
+                        <td><a href="view.jsp?bbsID=<%= list.get(i).getBbsID() %>"><%= list.get(i).getBbsTitle() %></a>
+
+                        </td> // 게시글 제목 리턴
+
+                        <td><%= list.get(i).getUserID() %></td> // UserID리턴
+                        <td><%= list.get(i).getBbsDate().substring(0, 11) + list.get(i).getBbsDate().substring(11, 13) + "시" +
+                                        list.get(i).getBbsDate().substring(14, 16) + "분"%></td> // 작성 시간 리턴
+                    </tr>
+                    <%
+                        }
+                    %>
                 </tbody>
             </table>
+
+            <!-- 페이지 이동 -->
+            <%
+                if(pageNumber != 1) { //현재 페이지가 있는지, 버튼 생성
+            %>
+                <a href = "bbs.jsp?pageNumber=<%=pageNumber - 1 %>" class="btn btn-success btn-arraw-left"> 
+
+                    이전
+
+                </a>
+            <%
+                } if(bbsDAO.nextPage(pageNumber + 1)) { //다음 페이지가 존재하는지
+            %>
+                <a href = "bbs.jsp?pageNumber=<%=pageNumber + 1 %>" class="btn btn-success btn-arraw-left">
+
+                    다음                
+
+                </a>
+            <% 
+                }
+            %>
             <a href="write.jsp" class="btn btn-primary pull-right">글쓰기</a>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js">
     <script src="js/bootstrap.js"></script>
 </body>
 </html>
