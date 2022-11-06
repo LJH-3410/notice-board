@@ -19,8 +19,19 @@
 <title>JSP 게시판 웹 사이트</title>
 </head>
 <body>
-    <% // java
-    //빈공간에 대한 처리
+    <% 
+	    String userID = null;
+	    if(session.getAttribute("userID") != null) { //user가 접속이 되어있다면 세션값이 할당되어 있다면
+	        userID = (String) session.getAttribute("userID");
+	    } 
+	    if (userID != null) { //로그인 되어있는 사람이 재로그인 되지 않도록함
+	        PrintWriter script = response.getWriter();
+	        script.println("<script>");
+	        script.println("alert('이미 로그인이 되어있습니다.')");
+	        script.println("location.href = 'main.jsp'");
+	        script.println("</script>");
+	    }
+    	//빈공간에 대한 처리
         if (user.getUserID() == null || user.getUserPassword() == null || user.getUserName() == null 
         || user.getUserGender() == null || user.getUserEmail() == null) {
             PrintWriter script = response.getWriter();
