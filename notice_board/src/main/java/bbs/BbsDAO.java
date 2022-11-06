@@ -155,5 +155,32 @@ public class BbsDAO {
 	        }
 	        return null; //해당글이 존재하지 않는경우 null
 	    }
+	    public int update(int bbsID, String bbsTitle, String bbsContent) {
+	        // 특정한 bbsID에 해당하는 제목과 내용을 변경
+	            String SQL = "UPDATE BBS SET bbsTitle = ?, bbsContent = ? WHERE bbsID = ?";
+	            try {
+	                PreparedStatement pstmt = conn.prepareStatement(SQL); // conn객체를 이용 SQL문장을 실행준비로 만듬
+	                pstmt.setString(1, bbsTitle);
+	                pstmt.setString(2, bbsContent);
+	                pstmt.setInt(3, bbsID);
+	                return pstmt.executeUpdate(); // 성공적으로 수행시 0이상의 값을 반환
+	            } catch(Exception e) {
+	                e.printStackTrace();
+	            }
+	            return -1; //데이터베이스오류
+	        }
 
-	}
+	        public int delete(int bbsID) { // bbsAvailable = 0 하면 삭제처리됨
+	            String SQL = "UPDATE BBS SET bbsAvailable = 0 WHERE bbsID = ?";
+	            try {
+	                PreparedStatement pstmt = conn.prepareStatement(SQL); // conn객체를 이용 SQL문장을 실행준비로 만듬
+	                pstmt.setInt(1, bbsID);
+	                return pstmt.executeUpdate(); // 성공적으로 수행시 0이상의 값을 반환
+	            } catch(Exception e) {
+	                e.printStackTrace();
+	            }
+	            return -1; //데이터베이스오류
+	        }   
+
+}
+
