@@ -31,7 +31,7 @@ public class UserDAO {
             e.printStackTrace();
         }
     }
-
+    //로그인 처리
     public int login(String userID, String userPassword) {
         String SQL = "SELECT userPassword FROM USER WHERE userID = ?"; //?로 userID를 받음
         try {
@@ -53,4 +53,21 @@ public class UserDAO {
         }
         return -2; // 데이터베이스 오류
     }
-}
+    //회원가입 정보 처리
+    public int join(User user) {
+        String SQL = "INSERT INTO USER VALUES (?, ?, ?, ?, ?)"; // user정보로 들어갈 5가지
+        try {
+            pstmt = conn.prepareStatement(SQL);
+            pstmt.setString(1, user.getUserID()); //물음표에 들어갈내용이 무엇인지, SQL순서를 지키며 넣기
+            pstmt.setString(2, user.getUserPassword());
+            pstmt.setString(3, user.getUserName());
+            pstmt.setString(4, user.getUserGender());
+            pstmt.setString(5, user.getUserEmail());
+            return pstmt.executeUpdate(); // 해당 스테이트먼트를 실행한 결과를 넣을 수 있도록
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+            return -1; // 데이터베이스오류
+     }
+ }
+
